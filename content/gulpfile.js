@@ -1,7 +1,10 @@
 const { src, dest, series, parallel, watch } = require('gulp');
+const browserify = require("browserify");
+const source = require("vinyl-source-stream");
+const tsify = require("tsify");
 const sass = require('gulp-sass')(require('sass'));
-const ts = require('gulp-typescript');
-const tsProject = ts.createProject('tsconfig.json');
+// const ts = require('gulp-typescript');
+// const tsProject = ts.createProject('tsconfig.json');
 
 function css() {
     return src('./src/scss/style.scss')
@@ -10,8 +13,16 @@ function css() {
 }
 
 function js() {
-    return tsProject.src()
-    .pipe(tsProject()).js
+    return browserify({
+        basedir: '.',
+        debug: true,
+        entries: ['src/ts/main.ts'],
+        cache: {},
+        packageCache: {}
+    })
+    .plugin(tsify)
+    .bundle()
+    .pipe(source("bundle.js"))
     .pipe(dest('./dist'));
 }
 
