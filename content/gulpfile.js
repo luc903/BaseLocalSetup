@@ -3,8 +3,6 @@ const browserify = require("browserify");
 const source = require("vinyl-source-stream");
 const tsify = require("tsify");
 const sass = require('gulp-sass')(require('sass'));
-// const ts = require('gulp-typescript');
-// const tsProject = ts.createProject('tsconfig.json');
 
 function css() {
     return src('./src/scss/style.scss')
@@ -15,6 +13,7 @@ function css() {
 function js() {
     return browserify({
         basedir: '.',
+        //Set as true enables sourcemaps
         debug: true,
         entries: ['src/ts/main.ts'],
         cache: {},
